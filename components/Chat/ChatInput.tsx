@@ -54,7 +54,6 @@ export const ChatInput = ({
   } = useContext(HomeContext);
 
   const [content, setContent] = useState<string>();
-  const [isTyping, setIsTyping] = useState<boolean>(false);
   const [showPromptList, setShowPromptList] = useState(false);
   const [activePromptIndex, setActivePromptIndex] = useState(0);
   const [promptInputValue, setPromptInputValue] = useState('');
@@ -64,7 +63,7 @@ export const ChatInput = ({
   const [plugin, setPlugin] = useState<Plugin | null>(null);
 
   const promptListRef = useRef<HTMLUListElement | null>(null);
-
+  const compositionStartRef = useRef<boolean>(false);
   const filteredPrompts = prompts.filter((prompt) =>
     prompt.name.toLowerCase().includes(promptInputValue.toLowerCase()),
   );
@@ -162,7 +161,7 @@ export const ChatInput = ({
       } else {
         setActivePromptIndex(0);
       }
-    } else if (e.key === 'Enter' && !isTyping && !isMobile() && !e.shiftKey) {
+    } else if (e.key === 'Enter' && !compositionStartRef.current && !isMobile() && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     } else if (e.key === '/' && e.metaKey) {
@@ -329,8 +328,8 @@ export const ChatInput = ({
             }
             value={content}
             rows={1}
-            onCompositionStart={() => setIsTyping(true)}
-            onCompositionEnd={() => setIsTyping(false)}
+            onCompositionStart={() => compositionStartRef.current = true}
+            onCompositionEnd={() => compositionStartRef.current = false}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
           />
