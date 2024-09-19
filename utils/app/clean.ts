@@ -12,15 +12,15 @@ export const cleanSelectedConversation = (conversation: Conversation) => {
 
   let updatedConversation = conversation;
 
-  // check for model on each conversation
+  // 检查每次对话的模型
   if (!updatedConversation.model) {
     updatedConversation = {
       ...updatedConversation,
-      model: updatedConversation.model || OpenAIModels[OpenAIModelID.GPT_3_5],
+      model: updatedConversation.model || OpenAIModels[OpenAIModelID.GPT_4o_mini],
     };
   }
 
-  // check for system prompt on each conversation
+  // 检查每次对话的系统提示
   if (!updatedConversation.prompt) {
     updatedConversation = {
       ...updatedConversation,
@@ -67,7 +67,7 @@ export const cleanConversationHistory = (history: any[]): Conversation[] => {
   return history.reduce((acc: any[], conversation) => {
     try {
       if (!conversation.model) {
-        conversation.model = OpenAIModels[OpenAIModelID.GPT_3_5];
+        conversation.model = OpenAIModels[OpenAIModelID.GPT_4o_mini];
       }
 
       if (!conversation.prompt) {
@@ -90,7 +90,7 @@ export const cleanConversationHistory = (history: any[]): Conversation[] => {
       return acc;
     } catch (error) {
       console.warn(
-        `error while cleaning conversations' history. Removing culprit`,
+        `清除对话历史记录时出错。删除罪魁祸首`,
         error,
       );
     }
